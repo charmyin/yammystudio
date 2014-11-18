@@ -15,7 +15,7 @@ import com.charmyin.cmstudio.basic.authorize.vo.Organization;
  * @author YinCM
  * @since 2013-9-3 14:08:16
  */
-//@Service
+@Service
 public class OrganizationServiceImpl implements OrganizationService {
 
 	@Resource

@@ -54,6 +54,9 @@ public class Menu {
 	public void setId(int id) {
 		this.id = id;
 	}
+	public void set_id(int _id) {
+		this.id = _id;
+	}
 	public String getName() {
 		return name;
 	}

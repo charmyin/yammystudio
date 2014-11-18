@@ -21,7 +21,7 @@ import com.charmyin.cmstudio.basic.authorize.vo.User;
  * @author YinCM
  * @since 2013-9-14 11:05:19
  */
-//@Service
+@Service
 public class UserServiceImpl implements UserService{
 	
 	Logger logger = Logger.getLogger(UserServiceImpl.class);
@@ -124,7 +124,7 @@ public class UserServiceImpl implements UserService{
 	public void insertUserRole(int userId, int roleId){
 		Map<String,Object> map = new HashMap<String,Object>();
 		map.put("userId", userId);
-		map.put("roleName", roleId);
+		map.put("roleId", roleId);
 		userMapper.insertUserRole(map);
 	}
 	

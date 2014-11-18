@@ -87,13 +87,13 @@ public class UserController {
 	@Resource
 	UserService userService;
 
-	//@Resource
+	@Resource
 	IdentityService identityService;
 
-	//@Resource
+	@Resource
 	OrganizationService organizationService;
 	
-	//@Resource
+	@Resource
 	IdentityCommonService identityCommonService;
 
 	@RequestMapping(value = "/user/manage", method = RequestMethod.GET)

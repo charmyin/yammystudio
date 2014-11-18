@@ -17,7 +17,7 @@ import com.charmyin.cmstudio.basic.authorize.vo.User;
  * @author YinCM
  * @since 2013-9-3 14:08:16
  */
-//@Service
+@Service
 public class RoleServiceImpl implements RoleService {
 
 	@Resource

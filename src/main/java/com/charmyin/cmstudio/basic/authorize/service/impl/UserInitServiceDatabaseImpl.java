@@ -23,7 +23,7 @@ import com.charmyin.cmstudio.common.utils.StringUtil;
  * @author YinCM
  * @since
  */
-//@Service
+@Service
 public class UserInitServiceDatabaseImpl implements UserInitService {
 	
 	@Resource

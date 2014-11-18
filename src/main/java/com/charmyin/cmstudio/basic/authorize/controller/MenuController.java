@@ -37,7 +37,7 @@ public class MenuController {
 	
 	private static Logger logger = Logger.getLogger(MenuController.class);
 	
-	//@Resource
+	@Resource
 	MenuService menuService;
 
 	/**

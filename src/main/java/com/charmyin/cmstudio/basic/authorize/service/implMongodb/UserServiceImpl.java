@@ -15,7 +15,7 @@ import com.charmyin.cmstudio.basic.authorize.service.UserService;
 import com.charmyin.cmstudio.basic.authorize.vo.User;
 import com.charmyin.cmstudio.basic.authorize.vo.UserRole;
 
-@Service
+//@Service
 public class UserServiceImpl implements UserService {
 	
 	@Autowired
@@ -50,7 +50,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public User getUserById(int id) {
-		User user = mongoOperations.findOne(new Query(Criteria.where("id").is(id)), User.class, "shiro_user");
+		User user = mongoOperations.findOne(new Query(Criteria.where("_id").is(id)), User.class, "shiro_user");
 		return user;
 	}
 

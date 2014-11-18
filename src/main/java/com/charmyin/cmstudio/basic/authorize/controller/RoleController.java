@@ -33,7 +33,7 @@ import com.charmyin.cmstudio.web.utils.ResponseUtil;
 public class RoleController {
 	private static Logger logger = Logger.getLogger(RoleController.class);
 	
-	//@Resource
+	@Resource
 	private RoleService roleService;
 	
 	/**

@@ -23,7 +23,7 @@ import com.charmyin.cmstudio.web.utils.UserSessionUtil;
 @Controller
 public class TreeItemController {
 
-	//@Resource
+	@Resource
 	TreeItemService treeItemService;
 	
 	@RequestMapping(value="/organizationWithUser/treeItems", method=RequestMethod.GET)

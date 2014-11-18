@@ -163,7 +163,7 @@ function loadRolesForChoose(){
 		//alert(msg[0].name);
 		htmlInner+="<br/><br/>";
 		for(var i=0; i<msg.length; i++){
-			htmlInner+='&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" class="roleChooseClass" value="'+msg[i].name+'"/>'+msg[i].name+'<br/>';
+			htmlInner+='&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" class="roleChooseClass" value="'+msg[i].id+'"/>'+msg[i].name+'<br/>';
 		}
 		$("#innerRoleChoose").html(htmlInner);
 	});

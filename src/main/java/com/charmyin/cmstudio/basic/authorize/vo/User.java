@@ -33,7 +33,9 @@ public class User {
     }
     
 	private Integer id;
-	
+	public void set_id(int _id) {
+		this.id = _id;
+	}
 	@NotNull(message = "登录名不允许为空")
 	@Size(max=50, message="登录名长度应小于50")
 	private String loginId;

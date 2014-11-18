@@ -32,7 +32,7 @@ import com.charmyin.cmstudio.web.utils.ResponseUtil;
 public class OrganizationController {
 	private static Logger logger = Logger.getLogger(OrganizationController.class);
 	
-	//@Resource
+	@Resource
 	private OrganizationService organizationService;
 
 

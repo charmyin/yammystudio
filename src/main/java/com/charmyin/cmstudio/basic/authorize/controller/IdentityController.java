@@ -60,19 +60,19 @@ import com.octo.captcha.service.multitype.MultiTypeCaptchaService;
 public class IdentityController {
 
 
-	//@Resource
+	@Resource
 	private IdentityService identityService;
 	
 	@Resource
 	private UserService userService;
 	
-	//@Resource(name="userInitServiceDatabaseImpl")
+	@Resource(name="userInitServiceDatabaseImpl")
 	private UserInitService userInitService;
 	
-	//@Resource
+	@Resource
 	private OrganizationService organizationService;
 
-	//@Resource
+	@Resource
 	private RoleService roleService;
 	
 	@Resource

@@ -11,7 +11,7 @@ import com.charmyin.cmstudio.basic.authorize.persistence.MenuMapper;
 import com.charmyin.cmstudio.basic.authorize.service.MenuService;
 import com.charmyin.cmstudio.basic.authorize.vo.Menu;
 
-//@Service
+@Service
 public class MenuServiceImpl implements MenuService {
 
 	@Resource

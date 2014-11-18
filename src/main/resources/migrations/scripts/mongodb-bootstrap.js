@@ -53,17 +53,17 @@ db.shiro_user.insert({"_id":NumberInt(1),"login_id":"admin", "name":"admin", "em
 
 db.shiro_role.insert({"_id":NumberInt(1),"name":"developer","description":"开发者角色", "organization_id":NumberInt(1), "permission":"", "menu":"1,2,3,4,5,6,7,8,9",  "remark":"开发者角色", "state":true});
 
-db.shiro_role.insert({"_id":NumberInt(1),"user_id":NumberInt(1), "role_id":NumberInt(1)});
+db.shiro_role.insert({"_id":NumberInt(1),"userId":NumberInt(1), "roleId":NumberInt(1)});
 
-db.basic_menu.insert({"_id":NumberInt(1),name:"root", link_url:""});
-db.basic_menu.insert({"_id":NumberInt(2),name:"系统管理", parent_id:1, link_url:""});
-db.basic_menu.insert({"_id":NumberInt(3),name:"开发人员管理", parent_id:1, link_url:""});
-db.basic_menu.insert({"_id":NumberInt(4),name:"模板子系统", parent_id:1, link_url:""});
-db.basic_menu.insert({"_id":NumberInt(5),name:"权限管理", parent_id:2, link_url:""});
-db.basic_menu.insert({"_id":NumberInt(6),name:"菜单资源管理", parent_id:5, link_url:""});
-db.basic_menu.insert({"_id":NumberInt(7),name:"角色管理", parent_id:5, link_url:""});
-db.basic_menu.insert({"_id":NumberInt(8),name:"用户管理", parent_id:5, link_url:""});
-db.basic_menu.insert({"_id":NumberInt(9),name:"组织机构管理", parent_id:5, link_url:""});
+db.basic_menu.insert({"_id":NumberInt(1),name:"root", linkUrl:""});
+db.basic_menu.insert({"_id":NumberInt(2),name:"系统管理", parentId:1, linkUrl:""});
+db.basic_menu.insert({"_id":NumberInt(3),name:"开发人员管理", parentId:1, linkUrl:""});
+db.basic_menu.insert({"_id":NumberInt(4),name:"模板子系统", parentId:1, linkUrl:""});
+db.basic_menu.insert({"_id":NumberInt(5),name:"权限管理", parentId:2, linkUrl:""});
+db.basic_menu.insert({"_id":NumberInt(6),name:"菜单资源管理", parentId:5, linkUrl:""});
+db.basic_menu.insert({"_id":NumberInt(7),name:"角色管理", parentId:5, linkUrl:""});
+db.basic_menu.insert({"_id":NumberInt(8),name:"用户管理", parentId:5, linkUrl:""});
+db.basic_menu.insert({"_id":NumberInt(9),name:"组织机构管理", parentId:5, linkUrl:""});
 
 
 

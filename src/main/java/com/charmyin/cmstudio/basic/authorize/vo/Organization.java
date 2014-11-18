@@ -16,7 +16,9 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Organization {
 	
 	private Integer id;
-	
+	public void set_id(int _id) {
+		this.id = _id;
+	}
 	@NotNull
 	@Size(max=200, message="备注长度应小于200")
 	private String name;
