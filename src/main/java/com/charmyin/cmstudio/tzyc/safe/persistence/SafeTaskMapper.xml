@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.charmyin.cmstudio.tzyc.safe.persistence.SafeTaskMapper">
+	<resultMap id="BaseResultMap" type="com.charmyin.cmstudio.tzyc.safe.vo.SafeTask">
+		<id column="ID" property="id" jdbcType="VARCHAR" />
+		<result column="CREATOR_ID" property="creatorId" jdbcType="INTEGER" />
+		<result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="TASK_TYPE" property="taskType" jdbcType="INTEGER" />
+		<result column="COID" property="coId" jdbcType="INTEGER" />  
+		<result column="DEVICE_ID" property="deviceId" jdbcType="VARCHAR" />
+		<result column="DETAIL_ID" property="detailId" jdbcType="VARCHAR" />
+		<result column="START_TIME" property="startTime" jdbcType="TIMESTAMP" />
+		<result column="END_TIME" property="endTime" jdbcType="TIMESTAMP" />
+		<result column="RECORD_STATUS" property="recordStatus"
+			jdbcType="INTEGER" />
+	</resultMap>
+	<resultMap id="BaseResultMapJoin" type="com.charmyin.cmstudio.tzyc.safe.vo.SafeTask">
+		<id column="ID" property="id" jdbcType="VARCHAR" />
+		<result column="CREATOR_ID" property="creatorId" jdbcType="INTEGER" />
+		<result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="COID" property="coId" jdbcType="INTEGER" />
+		<result column="TASK_TYPE" property="taskType" jdbcType="INTEGER" />
+		<result column="USERNAME" property="creatorUi" jdbcType="VARCHAR" />
+		<result column="DEVICE_ID" property="deviceId" jdbcType="VARCHAR" />
+		<result column="DEVICE_NAME" property="deviceName" jdbcType="VARCHAR" />
+		<result column="DETAIL_ID" property="detailId" jdbcType="VARCHAR" />
+		<result column="START_TIME" property="startTime" jdbcType="TIMESTAMP" />
+		<result column="END_TIME" property="endTime" jdbcType="TIMESTAMP" />
+		<result column="RECORD_STATUS" property="recordStatus"
+			jdbcType="INTEGER" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		t.ID as ID, t.CREATOR_ID as CREATOR_ID, t.CREATE_TIME as CREATE_TIME , TASK_TYPE, DEVICE_ID,
+		DETAIL_ID, START_TIME, END_TIME, d.`NAME` as device_name, t.RECORD_STATUS as RECORD_STATUS, U.name as USERNAME
+	</sql>
+	<!-- <select id="getListSafeTasks" resultMap="BaseResultMapByJoin">
+		SELECT
+		tb_safe_task.ID,
+		tb_safe_task.CREATOR_ID,
+
+		tb_safe_task.CREATE_TIME,
+		tb_safe_task.TASK_TYPE,
+		tb_safe_task.DEVICE_ID,
+		tb_safe_task.DEPART_ID,
+		tb_safe_task.DETAIL_ID,
+		tb_safe_task.START_TIME,
+		tb_safe_task.END_TIME,
+		tb_safe_task.RECORD_STATUS,
+		shiro_user.name AS USERNAME
+
+		FROM
+		
+		tb_safe_task
+		join shiro_user on
+		tb_safe_task.CREATOR_ID = shiro_user.id
+		where
+		tb_safe_task.RECORD_STATUS=0
+		order by
+		tb_safe_task.CREATE_TIME desc
+
+	</select> -->
+
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from tb_safe_task
+		where ID = #{id,jdbcType=VARCHAR}
+	</select>
+	
+	<select id="getlist_TaskSchedule_ForExport" resultMap="BaseResultMapJoin" parameterType="java.util.Map">
+	select t1.START_TIME as startTime,t1.CREATE_TIME as
+	createTime,t1.END_TIME as endTime,s1.name as creatorName,
+	s2.name as inspectName,bo.`name` as departName, t1.TASK_TYPE as
+	taskType,t4.TASK_STATUS as taskStatus,
+	t2.POSITION as position,t2.`CODE` as code,t2.`NAME` as name,t3.`NAME` as typeName,
+	t4.INSPECTOR_ID as inspectorId
+	from TB_SAFE_TASK t1 
+	join TB_SAFE_DEVICE t2 on t1.DEVICE_ID = t2.ID 
+	join TB_SAFE_DEVICE_TYPE t3 on t3.ID = t2.TYPE_ID 
+	join TB_SAFE_TASK_DETAIL t4 on t4.id = t1.DETAIL_ID 
+	join shiro_user s1 on t1.CREATOR_ID = s1.id 
+	join shiro_user s2 on s2.id = t4.INSPECTOR_ID
+	join basic_organization bo on t2.DEPART_ID = bo.id
+	where t1.RECORD_STATUS=0
+	<if test="coId != null">
+		and t1.COID=#{coId,jdbcType=INTEGER}
+	</if>
+	<!-- <if test="startDate != null and endDate!=null" > and t4.INSPECT_TIME 
+		BETWEEN #{startDate, jdbcType=VARCHAR} and #{endDate, jdbcType=VARCHAR} </if> -->
+	<if test="startDate != null">
+		and t4.INSPECT_TIME&gt;=#{startDate,jdbcType=TIMESTAMP}
+	</if>
+	<if test="endDate != null">
+		and t4.INSPECT_TIME&lt;=#{endDate,jdbcType=TIMESTAMP}
+	</if>
+	order by t4.INSPECT_TIME
+		<!-- select t1.START_TIME as startTime,t1.CREATE_TIME as createTime,t1.END_TIME as endTime,s1.name as creatorName,
+s2.name as inspectName,bo.`name` as departName, t1.TASK_TYPE as taskType,t4.TASK_RESULT as taskResult,
+t2.POSITION as position,t2.`CODE` as code,t2.`NAME` as name,t3.`NAME` as typeName,
+t4.INSPECTOR_ID as inspectorId
+from TB_SAFE_TASK t1 join TB_SAFE_DEVICE t2
+on t1.DEVICE_ID = t2.ID join TB_SAFE_DEVICE_TYPE t3
+on t3.ID = t2.TYPE_ID join TB_SAFE_TASK_DETAIL t4
+on t4.TASK_ID = t1.ID join shiro_user s1
+on t1.CREATOR_ID = s1.id join shiro_user s2
+on s2.id = t4.INSPECTOR_ID
+join basic_organization bo on t2.DEPART_ID = bo.id
+where 
+		t1.RECORD_STATUS=0
+		order by
+		t1.CREATE_TIME desc -->
+	</select>
+
+	<select id="findAllSafeTaskEquals" resultMap="BaseResultMapJoin"
+		parameterType="com.charmyin.cmstudio.tzyc.safe.vo.SafeTask">
+		select
+		<include refid="Base_Column_List" />
+		from tb_safe_task t 
+		join TB_SAFE_DEVICE d on t.device_id = d.id
+		join shiro_user U on t.CREATOR_ID = U.id
+		where t.RECORD_STATUS=0
+		
+			<if test="creatorId != null">
+				and CREATOR_ID = #{creatorId,jdbcType=INTEGER}
+			</if>
+			<if test="createTime != null">
+				and CREATE_TIME = #{createTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="taskType != null">
+				and TASK_TYPE = #{taskType,jdbcType=INTEGER}
+			</if>
+			<if test="coId != null">
+				and COID = #{coId,jdbcType=INTEGER}
+			</if>
+			<if test="deviceId != null">
+				and DEVICE_ID = #{deviceId,jdbcType=VARCHAR}
+			</if>
+			<if test="detailId != null">
+				and DETAIL_ID = #{detailId,jdbcType=VARCHAR}
+			</if>
+			<if test="startTime != null">
+				and START_TIME = #{startTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="endTime != null">
+				and END_TIME = #{endTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="coId != null" >
+		       and d.COID=#{coId,jdbcType=VARCHAR}
+		    </if>
+		
+	</select>
+
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from
+		tb_safe_task
+		where ID = #{id,jdbcType=VARCHAR}
+	</delete>
+	<insert id="insert" parameterType="com.charmyin.cmstudio.tzyc.safe.vo.SafeTask">
+		insert into tb_safe_task (ID,
+		CREATOR_ID, CREATE_TIME,
+		TASK_TYPE,DEVICE_ID, DETAIL_ID,
+		START_TIME,
+		END_TIME, RECORD_STATUS, COID
+		)
+		values (#{id,jdbcType=VARCHAR},
+		#{creatorId,jdbcType=INTEGER},
+		#{createTime,jdbcType=TIMESTAMP},
+		#{taskType,jdbcType=INTEGER}, #{deviceId,jdbcType=VARCHAR},
+		#{detailId,jdbcType=VARCHAR},
+		#{startTime,jdbcType=TIMESTAMP},
+		#{endTime,jdbcType=TIMESTAMP},
+		#{recordStatus,jdbcType=INTEGER},
+		#{coId,jdbcType=INTEGER}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="com.charmyin.cmstudio.tzyc.safe.vo.SafeTask">
+		insert into tb_safe_task
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				ID,
+			</if>
+			<if test="creatorId != null">
+				CREATOR_ID,
+			</if>
+			<if test="createTime != null">
+				CREATE_TIME,
+			</if>
+			<if test="taskType != null">
+				TASK_TYPE,
+			</if>
+			
+			<if test="deviceId != null">
+				DEVICE_ID,
+			</if>
+			<if test="detailId != null">
+				DETAIL_ID,
+			</if>
+			<if test="startTime != null">
+				START_TIME,
+			</if>
+			<if test="endTime != null">
+				END_TIME,
+			</if>
+			<if test="recordStatus != null">
+				RECORD_STATUS,
+			</if>
+			<if test="coId != null">
+	     	    COID,
+	        </if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=VARCHAR},
+			</if>
+			<if test="creatorId != null">
+				#{creatorId,jdbcType=INTEGER},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="taskType != null">
+				#{taskType,jdbcType=INTEGER},
+			</if>
+			
+			<if test="deviceId != null">
+				#{deviceId,jdbcType=VARCHAR},
+			</if>
+			<if test="detailId != null">
+				#{detailId,jdbcType=VARCHAR},
+			</if>
+			<if test="startTime != null">
+				#{startTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="endTime != null">
+				#{endTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="recordStatus != null">
+				#{recordStatus,jdbcType=INTEGER},
+			</if>
+			<if test="coId != null">
+	     	    #{coId,jdbcType=INTEGER},
+	        </if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.charmyin.cmstudio.tzyc.safe.vo.SafeTask">
+		update tb_safe_task
+		<set>
+			<if test="creatorId != null">
+				CREATOR_ID = #{creatorId,jdbcType=INTEGER},
+			</if>
+			<if test="createTime != null">
+				CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="taskType != null">
+				TASK_TYPE = #{taskType,jdbcType=INTEGER},
+			</if>
+			
+			<if test="deviceId != null">
+				DEVICE_ID = #{deviceId,jdbcType=VARCHAR},
+			</if>
+			<if test="detailId != null">
+				DETAIL_ID = #{detailId,jdbcType=VARCHAR},
+			</if>
+			<if test="startTime != null">
+				START_TIME = #{startTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="endTime != null">
+				END_TIME = #{endTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="recordStatus != null">
+				RECORD_STATUS = #{recordStatus,jdbcType=INTEGER},
+			</if>
+		</set>
+		where ID = #{id,jdbcType=VARCHAR}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.charmyin.cmstudio.tzyc.safe.vo.SafeTask">
+		update
+		tb_safe_task
+		set CREATOR_ID = #{creatorId,jdbcType=INTEGER},
+		CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+		TASK_TYPE =
+		#{taskType,jdbcType=INTEGER},
+		
+		DEVICE_ID = #{deviceId,jdbcType=VARCHAR},
+		DETAIL_ID = #{detailId,jdbcType=VARCHAR},
+		START_TIME =
+		#{startTime,jdbcType=TIMESTAMP},
+		END_TIME =
+		#{endTime,jdbcType=TIMESTAMP},
+		RECORD_STATUS =
+		#{recordStatus,jdbcType=INTEGER}
+		where ID = #{id,jdbcType=VARCHAR}
+	</update>
+</mapper>

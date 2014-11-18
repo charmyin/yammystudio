@@ -1,0 +1,560 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.charmyin.cmstudio.tzyc.safe.persistence.SafeDeviceMapper" >
+  <resultMap id="BaseResultMap" type="com.charmyin.cmstudio.tzyc.safe.vo.SafeDevice" >
+    <id column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="CREATOR_ID" property="creatorId" jdbcType="INTEGER" />
+    <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="CODE" property="code" jdbcType="VARCHAR" />
+    <result column="TYPE_ID" property="typeId" jdbcType="VARCHAR" />
+    <result column="NAME" property="name" jdbcType="VARCHAR" />
+    <result column="DEPART_ID" property="departId" jdbcType="VARCHAR" />
+    <result column="BRAND" property="brand" jdbcType="VARCHAR" />
+    <result column="MODEL" property="model" jdbcType="VARCHAR" />
+    <result column="POSITION" property="position" jdbcType="VARCHAR" />
+    <result column="APPLICATION" property="application" jdbcType="VARCHAR" />
+    <result column="OPENING_DATE" property="openingDate" jdbcType="DATE" />
+    <result column="EQUIP_STATUS" property="equipStatus" jdbcType="INTEGER" />
+    <result column="PRODUCTION_DATE" property="productionDate" jdbcType="DATE" />
+    <result column="AMOUNT" property="amount" jdbcType="INTEGER" />
+    <result column="PRODUCTION_BATCH" property="productionBatch" jdbcType="VARCHAR" />
+    <result column="REGISTRATION_CODE" property="registrationCode" jdbcType="VARCHAR" />
+    <result column="FINANCIAL_CODE" property="financialCode" jdbcType="VARCHAR" />
+    <result column="MANUFACTURER" property="manufacturer" jdbcType="VARCHAR" />
+    <result column="REMARk" property="remark" jdbcType="VARCHAR" />
+    <result column="PLATE_NUMBER" property="plateNumber" jdbcType="VARCHAR" />
+    <result column="VEHICLE_TYPE" property="vehicleType" jdbcType="VARCHAR" />
+    <result column="INITIAL_REGISTE_TIME" property="initialRegisteTime" jdbcType="TIMESTAMP" />
+    <result column="ENGINE_CODE" property="engineCode" jdbcType="VARCHAR" />
+    <result column="FRAME_CODE" property="frameCode" jdbcType="VARCHAR" />
+    <result column="VEHICLE_BOOK_CODE" property="vehicleBookCode" jdbcType="VARCHAR" />
+    <result column="ANNUAL_INSPECTION" property="annualInspection" jdbcType="VARCHAR" />
+    <result column="DRIVER" property="driver" jdbcType="VARCHAR" />
+    <result column="CREATE_TIMESTAMP" property="createTimestamp" jdbcType="BIGINT" />
+    <result column="RECORD_STATUS" property="recordStatus" jdbcType="INTEGER" />
+    <result column="CREATOR_NAME" property="creatorName" jdbcType="VARCHAR" />
+    <result column="COID" property="coId" jdbcType="INTEGER" />
+    
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    A.ID, CREATOR_ID, A.CREATE_TIME, CODE, TYPE_ID, A.NAME, DEPART_ID, BRAND, MODEL, POSITION, 
+    APPLICATION, OPENING_DATE, EQUIP_STATUS, PRODUCTION_DATE, AMOUNT, PRODUCTION_BATCH, 
+    REGISTRATION_CODE, FINANCIAL_CODE, MANUFACTURER, A.REMARk, PLATE_NUMBER, VEHICLE_TYPE, 
+    INITIAL_REGISTE_TIME, ENGINE_CODE, FRAME_CODE, VEHICLE_BOOK_CODE, ANNUAL_INSPECTION, 
+    DRIVER, CREATE_TIMESTAMP, RECORD_STATUS, B.NAME as CREATOR_NAME
+  </sql>
+  
+  
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.charmyin.cmstudio.tzyc.safe.vo.SafeDeviceExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    'false' as QUERYID,
+    <include refid="Base_Column_List" />
+    from tb_safe_device
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  
+  <select id="findAllDevice" resultMap="BaseResultMap" parameterType="com.charmyin.cmstudio.tzyc.safe.vo.SafeDevice">
+  	select 
+    <include refid="Base_Column_List" />
+    from tb_safe_device as A  join shiro_user as B on A.CREATOR_ID = B.id 
+    where RECORD_STATUS=0
+    <if test="coId != null" >
+	       and A.COID=#{coId,jdbcType=VARCHAR}
+	    </if>
+    order by CREATE_TIMESTAMP desc
+  </select>
+  
+  <select id="findAllDeviceEquals" resultMap="BaseResultMap" parameterType="com.charmyin.cmstudio.tzyc.safe.vo.SafeDevice">
+  	select 
+    <include refid="Base_Column_List" />
+    from tb_safe_device as A  join shiro_user as B on A.CREATOR_ID = B.id 
+    where RECORD_STATUS=0 
+    	<!-- <if test="coId != null" >
+	       and A.COID=#{coId,jdbcType=VARCHAR}
+	    </if> -->
+  
+      <if test="id != null" >
+       and id=#{id,jdbcType=VARCHAR}
+      </if>
+      <if test="creatorId != null" >
+        and CREATOR_ID=#{creatorId,jdbcType=INTEGER}
+      </if>
+      <if test="createTime != null" >
+       and CREATE_TIME = #{createTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="code != null" >
+       and CODE = #{code,jdbcType=VARCHAR}
+      </if>
+      <if test="typeId != null" >
+       and TYPE_ID = #{typeId,jdbcType=VARCHAR}
+      </if>
+      <if test="name != null" >
+       and NAME = #{name,jdbcType=VARCHAR}
+      </if>
+      <if test="departId != null" >
+       and DEPART_ID = #{departId,jdbcType=VARCHAR}
+      </if>
+    <!--   <if test="brand != null" >
+       and = #{brand,jdbcType=VARCHAR},
+      </if>
+      <if test="model != null" >
+       and = #{model,jdbcType=VARCHAR},
+      </if>
+      <if test="position != null" >
+       and = #{position,jdbcType=VARCHAR},
+      </if>
+      <if test="application != null" >
+       and = #{application,jdbcType=VARCHAR},
+      </if>
+      <if test="openingDate != null" >
+       and = #{openingDate,jdbcType=DATE},
+      </if>
+      <if test="equipStatus != null" >
+       and = #{equipStatus,jdbcType=INTEGER},
+      </if>
+      <if test="productionDate != null" >
+       and = #{productionDate,jdbcType=DATE},
+      </if>
+      <if test="amount != null" >
+       and = #{amount,jdbcType=INTEGER},
+      </if>
+      <if test="productionBatch != null" >
+       and = #{productionBatch,jdbcType=VARCHAR},
+      </if>
+      <if test="registrationCode != null" >
+       and = #{registrationCode,jdbcType=VARCHAR},
+      </if>
+      <if test="financialCode != null" >
+       and = #{financialCode,jdbcType=VARCHAR},
+      </if>
+      <if test="manufacturer != null" >
+       and = #{manufacturer,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+       and = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="plateNumber != null" >
+       and = #{plateNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="vehicleType != null" >
+       and = #{vehicleType,jdbcType=VARCHAR},
+      </if>
+      <if test="initialRegisteTime != null" >
+       and = #{initialRegisteTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="engineCode != null" >
+       and = #{engineCode,jdbcType=VARCHAR},
+      </if>
+      <if test="frameCode != null" >
+       and = #{frameCode,jdbcType=VARCHAR},
+      </if>
+      <if test="vehicleBookCode != null" >
+       and = #{vehicleBookCode,jdbcType=VARCHAR},
+      </if>
+      <if test="annualInspection != null" >
+       and = #{annualInspection,jdbcType=VARCHAR},
+      </if>
+      <if test="driver != null" >
+       and = #{driver,jdbcType=VARCHAR},
+      </if>
+      <if test="createTimestamp != null" >
+       and = #{createTimestamp,jdbcType=BIGINT},
+      </if>
+      <if test="recordStatus != null" >
+       and = #{recordStatus,jdbcType=INTEGER},
+      </if> -->
+    
+    order by CREATE_TIMESTAMP desc
+  </select>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_safe_device
+    where ID = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from tb_safe_device
+    where ID = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.charmyin.cmstudio.tzyc.safe.vo.SafeDevice" >
+    insert into tb_safe_device (ID, CREATOR_ID, CREATE_TIME, 
+      CODE, TYPE_ID, NAME, 
+      DEPART_ID, BRAND, MODEL, 
+      POSITION, APPLICATION, OPENING_DATE, 
+      EQUIP_STATUS, PRODUCTION_DATE, AMOUNT, 
+      PRODUCTION_BATCH, REGISTRATION_CODE, FINANCIAL_CODE, 
+      MANUFACTURER, REMARk, PLATE_NUMBER, 
+      VEHICLE_TYPE, INITIAL_REGISTE_TIME, ENGINE_CODE, 
+      FRAME_CODE, VEHICLE_BOOK_CODE, ANNUAL_INSPECTION, 
+      DRIVER, CREATE_TIMESTAMP, RECORD_STATUS, COID
+      )
+    values (#{id,jdbcType=VARCHAR}, #{creatorId,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{code,jdbcType=VARCHAR}, #{typeId,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+      #{departId,jdbcType=VARCHAR}, #{brand,jdbcType=VARCHAR}, #{model,jdbcType=VARCHAR}, 
+      #{position,jdbcType=VARCHAR}, #{application,jdbcType=VARCHAR}, #{openingDate,jdbcType=DATE}, 
+      #{equipStatus,jdbcType=INTEGER}, #{productionDate,jdbcType=DATE}, #{amount,jdbcType=INTEGER}, 
+      #{productionBatch,jdbcType=VARCHAR}, #{registrationCode,jdbcType=VARCHAR}, #{financialCode,jdbcType=VARCHAR}, 
+      #{manufacturer,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{plateNumber,jdbcType=VARCHAR}, 
+      #{vehicleType,jdbcType=VARCHAR}, #{initialRegisteTime,jdbcType=TIMESTAMP}, #{engineCode,jdbcType=VARCHAR}, 
+      #{frameCode,jdbcType=VARCHAR}, #{vehicleBookCode,jdbcType=VARCHAR}, #{annualInspection,jdbcType=VARCHAR}, 
+      #{driver,jdbcType=VARCHAR}, #{createTimestamp,jdbcType=BIGINT}, #{recordStatus,jdbcType=INTEGER}, #{coId, jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.charmyin.cmstudio.tzyc.safe.vo.SafeDevice" >
+    insert into tb_safe_device
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="creatorId != null" >
+        CREATOR_ID,
+      </if>
+      <if test="createTime != null" >
+        CREATE_TIME,
+      </if>
+      <if test="code != null" >
+        CODE,
+      </if>
+      <if test="typeId != null" >
+        TYPE_ID,
+      </if>
+      <if test="name != null" >
+        NAME,
+      </if>
+      <if test="departId != null" >
+        DEPART_ID,
+      </if>
+      <if test="brand != null" >
+        BRAND,
+      </if>
+      <if test="model != null" >
+        MODEL,
+      </if>
+      <if test="position != null" >
+        POSITION,
+      </if>
+      <if test="application != null" >
+        APPLICATION,
+      </if>
+      <if test="openingDate != null" >
+        OPENING_DATE,
+      </if>
+      <if test="equipStatus != null" >
+        EQUIP_STATUS,
+      </if>
+      <if test="productionDate != null" >
+        PRODUCTION_DATE,
+      </if>
+      <if test="amount != null" >
+        AMOUNT,
+      </if>
+      <if test="productionBatch != null" >
+        PRODUCTION_BATCH,
+      </if>
+      <if test="registrationCode != null" >
+        REGISTRATION_CODE,
+      </if>
+      <if test="financialCode != null" >
+        FINANCIAL_CODE,
+      </if>
+      <if test="manufacturer != null" >
+        MANUFACTURER,
+      </if>
+      <if test="remark != null" >
+        REMARk,
+      </if>
+      <if test="plateNumber != null" >
+        PLATE_NUMBER,
+      </if>
+      <if test="vehicleType != null" >
+        VEHICLE_TYPE,
+      </if>
+      <if test="initialRegisteTime != null" >
+        INITIAL_REGISTE_TIME,
+      </if>
+      <if test="engineCode != null" >
+        ENGINE_CODE,
+      </if>
+      <if test="frameCode != null" >
+        FRAME_CODE,
+      </if>
+      <if test="vehicleBookCode != null" >
+        VEHICLE_BOOK_CODE,
+      </if>
+      <if test="annualInspection != null" >
+        ANNUAL_INSPECTION,
+      </if>
+      <if test="driver != null" >
+        DRIVER,
+      </if>
+      <if test="createTimestamp != null" >
+        CREATE_TIMESTAMP,
+      </if>
+      <if test="recordStatus != null" >
+        RECORD_STATUS,
+      </if>
+      <if test="coId != null">
+     	 COID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="creatorId != null" >
+        #{creatorId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="code != null" >
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="typeId != null" >
+        #{typeId,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="departId != null" >
+        #{departId,jdbcType=VARCHAR},
+      </if>
+      <if test="brand != null" >
+        #{brand,jdbcType=VARCHAR},
+      </if>
+      <if test="model != null" >
+        #{model,jdbcType=VARCHAR},
+      </if>
+      <if test="position != null" >
+        #{position,jdbcType=VARCHAR},
+      </if>
+      <if test="application != null" >
+        #{application,jdbcType=VARCHAR},
+      </if>
+      <if test="openingDate != null" >
+        #{openingDate,jdbcType=DATE},
+      </if>
+      <if test="equipStatus != null" >
+        #{equipStatus,jdbcType=INTEGER},
+      </if>
+      <if test="productionDate != null" >
+        #{productionDate,jdbcType=DATE},
+      </if>
+      <if test="amount != null" >
+        #{amount,jdbcType=INTEGER},
+      </if>
+      <if test="productionBatch != null" >
+        #{productionBatch,jdbcType=VARCHAR},
+      </if>
+      <if test="registrationCode != null" >
+        #{registrationCode,jdbcType=VARCHAR},
+      </if>
+      <if test="financialCode != null" >
+        #{financialCode,jdbcType=VARCHAR},
+      </if>
+      <if test="manufacturer != null" >
+        #{manufacturer,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="plateNumber != null" >
+        #{plateNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="vehicleType != null" >
+        #{vehicleType,jdbcType=VARCHAR},
+      </if>
+      <if test="initialRegisteTime != null" >
+        #{initialRegisteTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="engineCode != null" >
+        #{engineCode,jdbcType=VARCHAR},
+      </if>
+      <if test="frameCode != null" >
+        #{frameCode,jdbcType=VARCHAR},
+      </if>
+      <if test="vehicleBookCode != null" >
+        #{vehicleBookCode,jdbcType=VARCHAR},
+      </if>
+      <if test="annualInspection != null" >
+        #{annualInspection,jdbcType=VARCHAR},
+      </if>
+      <if test="driver != null" >
+        #{driver,jdbcType=VARCHAR},
+      </if>
+      <if test="createTimestamp != null" >
+        #{createTimestamp,jdbcType=BIGINT},
+      </if>
+      <if test="recordStatus != null" >
+        #{recordStatus,jdbcType=INTEGER},
+      </if>
+      <if test="coId != null">
+     	#{coId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.charmyin.cmstudio.tzyc.safe.vo.SafeDevice" >
+    update tb_safe_device
+    <set >
+      <if test="creatorId != null" >
+        CREATOR_ID = #{creatorId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="code != null" >
+        CODE = #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="typeId != null" >
+        TYPE_ID = #{typeId,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        NAME = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="departId != null" >
+        DEPART_ID = #{departId,jdbcType=VARCHAR},
+      </if>
+      <if test="brand != null" >
+        BRAND = #{brand,jdbcType=VARCHAR},
+      </if>
+      <if test="model != null" >
+        MODEL = #{model,jdbcType=VARCHAR},
+      </if>
+      <if test="position != null" >
+        POSITION = #{position,jdbcType=VARCHAR},
+      </if>
+      <if test="application != null" >
+        APPLICATION = #{application,jdbcType=VARCHAR},
+      </if>
+      <if test="openingDate != null" >
+        OPENING_DATE = #{openingDate,jdbcType=DATE},
+      </if>
+      <if test="equipStatus != null" >
+        EQUIP_STATUS = #{equipStatus,jdbcType=INTEGER},
+      </if>
+      <if test="productionDate != null" >
+        PRODUCTION_DATE = #{productionDate,jdbcType=DATE},
+      </if>
+      <if test="amount != null" >
+        AMOUNT = #{amount,jdbcType=INTEGER},
+      </if>
+      <if test="productionBatch != null" >
+        PRODUCTION_BATCH = #{productionBatch,jdbcType=VARCHAR},
+      </if>
+      <if test="registrationCode != null" >
+        REGISTRATION_CODE = #{registrationCode,jdbcType=VARCHAR},
+      </if>
+      <if test="financialCode != null" >
+        FINANCIAL_CODE = #{financialCode,jdbcType=VARCHAR},
+      </if>
+      <if test="manufacturer != null" >
+        MANUFACTURER = #{manufacturer,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        REMARk = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="plateNumber != null" >
+        PLATE_NUMBER = #{plateNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="vehicleType != null" >
+        VEHICLE_TYPE = #{vehicleType,jdbcType=VARCHAR},
+      </if>
+      <if test="initialRegisteTime != null" >
+        INITIAL_REGISTE_TIME = #{initialRegisteTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="engineCode != null" >
+        ENGINE_CODE = #{engineCode,jdbcType=VARCHAR},
+      </if>
+      <if test="frameCode != null" >
+        FRAME_CODE = #{frameCode,jdbcType=VARCHAR},
+      </if>
+      <if test="vehicleBookCode != null" >
+        VEHICLE_BOOK_CODE = #{vehicleBookCode,jdbcType=VARCHAR},
+      </if>
+      <if test="annualInspection != null" >
+        ANNUAL_INSPECTION = #{annualInspection,jdbcType=VARCHAR},
+      </if>
+      <if test="driver != null" >
+        DRIVER = #{driver,jdbcType=VARCHAR},
+      </if>
+      <if test="createTimestamp != null" >
+        CREATE_TIMESTAMP = #{createTimestamp,jdbcType=BIGINT},
+      </if>
+      <if test="recordStatus != null" >
+        RECORD_STATUS = #{recordStatus,jdbcType=INTEGER},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.charmyin.cmstudio.tzyc.safe.vo.SafeDevice" >
+    update tb_safe_device
+    set CREATOR_ID = #{creatorId,jdbcType=INTEGER},
+      CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      CODE = #{code,jdbcType=VARCHAR},
+      TYPE_ID = #{typeId,jdbcType=VARCHAR},
+      NAME = #{name,jdbcType=VARCHAR},
+      DEPART_ID = #{departId,jdbcType=VARCHAR},
+      BRAND = #{brand,jdbcType=VARCHAR},
+      MODEL = #{model,jdbcType=VARCHAR},
+      POSITION = #{position,jdbcType=VARCHAR},
+      APPLICATION = #{application,jdbcType=VARCHAR},
+      OPENING_DATE = #{openingDate,jdbcType=DATE},
+      EQUIP_STATUS = #{equipStatus,jdbcType=INTEGER},
+      PRODUCTION_DATE = #{productionDate,jdbcType=DATE},
+      AMOUNT = #{amount,jdbcType=INTEGER},
+      PRODUCTION_BATCH = #{productionBatch,jdbcType=VARCHAR},
+      REGISTRATION_CODE = #{registrationCode,jdbcType=VARCHAR},
+      FINANCIAL_CODE = #{financialCode,jdbcType=VARCHAR},
+      MANUFACTURER = #{manufacturer,jdbcType=VARCHAR},
+      REMARk = #{remark,jdbcType=VARCHAR},
+      PLATE_NUMBER = #{plateNumber,jdbcType=VARCHAR},
+      VEHICLE_TYPE = #{vehicleType,jdbcType=VARCHAR},
+      INITIAL_REGISTE_TIME = #{initialRegisteTime,jdbcType=TIMESTAMP},
+      ENGINE_CODE = #{engineCode,jdbcType=VARCHAR},
+      FRAME_CODE = #{frameCode,jdbcType=VARCHAR},
+      VEHICLE_BOOK_CODE = #{vehicleBookCode,jdbcType=VARCHAR},
+      ANNUAL_INSPECTION = #{annualInspection,jdbcType=VARCHAR},
+      DRIVER = #{driver,jdbcType=VARCHAR},
+      CREATE_TIMESTAMP = #{createTimestamp,jdbcType=BIGINT},
+      RECORD_STATUS = #{recordStatus,jdbcType=INTEGER}
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

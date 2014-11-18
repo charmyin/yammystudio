@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+xmlns:mvc="http://www.springframework.org/schema/mvc"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xmlns:context="http://www.springframework.org/schema/context"
+xmlns:p="http://www.springframework.org/schema/p" 
+xmlns:tx="http://www.springframework.org/schema/tx" 
+xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+xmlns:mongo="http://www.springframework.org/schema/data/mongo"
+xsi:schemaLocation="
+ http://www.springframework.org/schema/beans
+ http://www.springframework.org/schema/beans/spring-beans.xsd
+ http://www.springframework.org/schema/mvc
+ http://www.springframework.org/schema/mvc/spring-mvc.xsd
+ http://www.springframework.org/schema/tx
+ http://www.springframework.org/schema/tx/spring-tx.xsd
+ http://www.springframework.org/schema/context
+ http://www.springframework.org/schema/context/spring-context.xsd
+ http://www.springframework.org/schema/data/mongo
+ http://www.springframework.org/schema/data/mongo/spring-mongo.xsd">
+ 	
+	<!-- Root Context: defines shared resources visible to all other web components -->
+		
+	<!-- Grab out properties for use in these Spring Configs -->
+	<context:property-placeholder location="classpath:application-spring.properties" />
+	
+	<!-- enable autowire -->
+	<context:annotation-config />
+
+	<!-- Configures the @Controller programming model -->
+	<mvc:annotation-driven />
+
+	<!-- Enable transaction demarcation with annotations -->
+	<tx:annotation-driven />
+	
+	<!-- Enable component scanning and autowire (beware that this does not enable 
+		MyBatis mapper scanning!) -->
+	<context:component-scan base-package="com.charmyin.cmstudio" />
+	
+	<!-- We Use This for Bean Validation-->
+	<bean id="validator"
+		class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean" />
+		
+	<!-- transaction manager, use JtaTransactionManager for global tx -->
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	
+	<!-- Sample Beans -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<!-- <property name="basePackage" value="com.charmyin.cmstudio.basic.authorize.persistence" /> -->
+		<property name="basePackage" value="com.charmyin.cmstudio" />
+		<property name="annotationClass" value="com.charmyin.cmstudio.basic.initial.SQLMapper" />
+	</bean>
+	
+	<!-- Security Configuration / Apache Shiro -->
+	<import resource="shiro-context.xml" />
+	
+	<!-- Security Configuration / Apache Shiro -->
+	<import resource="jcaptcha-context.xml" />
+	
+	<!-- Quartz 任务调度管理  启用禁用-->
+	<!-- 	<import resource="spring-quartz.xml" /> -->
+	
+	<!-- Database Configuration / MyBatis -->
+	<!-- define the SqlSessionFactory -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<!-- <property name="typeAliasesPackage" value="com.charmyin.cmstudio.basic.authorize.domain" /> -->
+		<property name="configLocation" value="classpath:mybatis-config.xml" />
+	</bean>
+	
+	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+	    <constructor-arg index="0" ref="sqlSessionFactory" />
+	</bean>
+
+	<!-- Get the Datasource -->
+	<bean id="dataSource" class="org.apache.tomcat.dbcp.dbcp.BasicDataSource"
+		destroy-method="close">
+		<property name="driverClassName" value="${jdbc.driver}" />
+		<property name="url" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.user}" />
+		<property name="password" value="${jdbc.pass}" />
+	</bean>
+	
+	
+	<!-- Factory bean that creates the Mongo instance -->
+	<bean id="mongo" class="org.springframework.data.mongodb.core.MongoFactoryBean">
+		<property name="host" value="localhost" />
+	</bean>
+ 
+	<!-- MongoTemplate for connecting and quering the documents in the database -->
+	<bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
+		<constructor-arg name="mongo" ref="mongo" />
+		<constructor-arg name="databaseName" value="test" />
+	</bean>
+	
+	<mongo:repositories base-package="com.charmyin.cmstudio.basic.authorize.repository" />
+		
+	
+	<!-- <mvc:interceptors> -->
+		<!-- 使用bean定义一个Interceptor，直接定义在mvc:interceptors根下面的Interceptor将拦截所有的请求 -->
+		<!-- <bean class="com.host.app.web.interceptor.AllInterceptor"/> -->
+		<!-- 定义在mvc:interceptor下面的表示是对特定的请求才进行拦截的 -->
+		<!-- <mvc:interceptor>
+			<mvc:mapping path="/SafetyService/**"/>
+			<bean class="com.charmyin.cmstudio.basic.authorize.interceptor.TokenAuthInteceptorImpl"/>
+		</mvc:interceptor> -->
+		<!-- 定义在mvc:interceptor下面的表示是对特定的请求才进行拦截的 -->
+		<!-- <mvc:interceptor>
+			<mvc:mapping path="/7sManagementService/**"/>
+			<bean class="com.charmyin.cmstudio.basic.authorize.interceptor.TokenAuthInteceptorImpl"/>
+		</mvc:interceptor> -->
+		
+	<!-- </mvc:interceptors> -->
+</beans>

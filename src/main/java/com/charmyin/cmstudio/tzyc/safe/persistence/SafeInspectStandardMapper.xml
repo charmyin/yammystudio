@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.charmyin.cmstudio.tzyc.safe.persistence.SafeInspectStandardMapper" >
+  <resultMap id="BaseResultMap" type="com.charmyin.cmstudio.tzyc.safe.vo.SafeInspectStandard" >
+    <id column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="CREATOR_ID" property="creatorId" jdbcType="INTEGER" />
+    <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="TYPE_ID" property="typeId" jdbcType="VARCHAR" />
+    <result column="ITEM_ID" property="itemId" jdbcType="VARCHAR" />
+    <result column="DECRIPTION" property="decription" jdbcType="VARCHAR" />
+    <result column="REMARK" property="remark" jdbcType="VARCHAR" />
+    <result column="CREATE_TIMESTAMP" property="createTimestamp" jdbcType="BIGINT" />
+    <result column="RECORD_STATUS" property="recordStatus" jdbcType="INTEGER" />
+    <result column="COID" property="coId" jdbcType="INTEGER" />
+  </resultMap>
+  
+  <resultMap id="BaseResultMapByJoin" type="com.charmyin.cmstudio.tzyc.safe.vo.SafeInspectStandard" >
+    <id column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="CREATOR_ID" property="creatorId" jdbcType="INTEGER" />
+    <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="TYPE_ID" property="typeId" jdbcType="VARCHAR" />
+    <result column="TYPENAME" property="typeName" jdbcType="VARCHAR" />
+    <result column="ITEM_ID" property="itemId" jdbcType="VARCHAR" />
+    <result column="ITEMNAME" property="itemName" jdbcType="VARCHAR" />
+    <result column="DECRIPTION" property="decription" jdbcType="VARCHAR" />
+    <result column="REMARK" property="remark" jdbcType="VARCHAR" />
+    <result column="CREATE_TIMESTAMP" property="createTimestamp" jdbcType="BIGINT" />
+    <result column="RECORD_STATUS" property="recordStatus" jdbcType="INTEGER" />
+    <result column="COID" property="coId" jdbcType="INTEGER" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    ID, CREATOR_ID, CREATE_TIME, TYPE_ID, ITEM_ID, DECRIPTION, REMARK, CREATE_TIMESTAMP, 
+    RECORD_STATUS, COID
+  </sql>
+  
+  <select id="findAllSafeInspectStandard" resultMap="BaseResultMapByJoin" parameterType="com.charmyin.cmstudio.tzyc.safe.vo.SafeInspectStandard">
+	select 
+	tb_safe_inspect_standard.ID
+	, tb_safe_inspect_standard.CREATOR_ID
+	, tb_safe_inspect_standard.CREATE_TIME
+	, tb_safe_inspect_standard.TYPE_ID
+	, tb_safe_inspect_standard.ITEM_ID
+	, tb_safe_inspect_standard.DECRIPTION
+	, tb_safe_inspect_standard.REMARK
+	, tb_safe_inspect_standard.CREATE_TIMESTAMP
+	, tb_safe_inspect_standard.RECORD_STATUS 
+	, tb_safe_evaluate_type.NAME as TYPENAME
+	, tb_safe_evaluate_item.NAME as ITEMNAME
+	from tb_safe_inspect_standard
+	join tb_safe_evaluate_type on tb_safe_evaluate_type.ID = tb_safe_inspect_standard.TYPE_ID
+	JOIN tb_safe_evaluate_item on tb_safe_evaluate_item.ID = tb_safe_inspect_standard.ITEM_ID
+	where tb_safe_inspect_standard.RECORD_STATUS=0
+
+	<trim suffixOverrides="," >
+      <if test="typeId != null" >
+        and tb_safe_inspect_standard.TYPE_ID=#{typeId,jdbcType=VARCHAR}
+      </if>
+      <if test="itemId != null" >
+        and tb_safe_inspect_standard.ITEM_ID=#{itemId,jdbcType=VARCHAR}
+      </if>
+    </trim>
+	
+	order by tb_safe_inspect_standard.CREATE_TIMESTAMP desc
+	
+  </select>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_safe_inspect_standard
+    where ID = #{id,jdbcType=VARCHAR}
+  </select>
+  
+    <select id="selectByPrimaryKeyWithTypeItemName" resultMap="BaseResultMap" parameterType="java.lang.String" >
+	   select 
+	tb_safe_inspect_standard.ID
+	, tb_safe_inspect_standard.CREATOR_ID
+	, tb_safe_inspect_standard.CREATE_TIME
+	, tb_safe_inspect_standard.TYPE_ID
+	, tb_safe_inspect_standard.ITEM_ID
+	, tb_safe_inspect_standard.DECRIPTION
+	, tb_safe_inspect_standard.REMARK
+	, tb_safe_inspect_standard.CREATE_TIMESTAMP
+	, tb_safe_inspect_standard.RECORD_STATUS 
+	, tb_safe_evaluate_type.NAME as TYPENAME
+	, tb_safe_evaluate_item.NAME as ITEMNAME
+	from tb_safe_inspect_standard
+	join tb_safe_evaluate_type on tb_safe_evaluate_type.ID = tb_safe_inspect_standard.TYPE_ID
+	JOIN tb_safe_evaluate_item on tb_safe_evaluate_item.ID = tb_safe_inspect_standard.ITEM_ID
+	where tb_safe_inspect_standard.RECORD_STATUS=0 and tb_safe_inspect_standard.ID = #{id,jdbcType=VARCHAR}
+	  </select>
+  
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from tb_safe_inspect_standard
+    where ID = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.charmyin.cmstudio.tzyc.safe.vo.SafeInspectStandard" >
+    insert into tb_safe_inspect_standard (ID, CREATOR_ID, CREATE_TIME, 
+      TYPE_ID, ITEM_ID, DECRIPTION, 
+      REMARK, CREATE_TIMESTAMP, RECORD_STATUS, COID
+      )
+    values (#{id,jdbcType=VARCHAR}, #{creatorId,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{typeId,jdbcType=VARCHAR}, #{itemId,jdbcType=VARCHAR}, #{decription,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR}, #{createTimestamp,jdbcType=BIGINT}, #{recordStatus,jdbcType=INTEGER}, #{coId, jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.charmyin.cmstudio.tzyc.safe.vo.SafeInspectStandard" >
+    insert into tb_safe_inspect_standard
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="creatorId != null" >
+        CREATOR_ID,
+      </if>
+      <if test="createTime != null" >
+        CREATE_TIME,
+      </if>
+      <if test="typeId != null" >
+        TYPE_ID,
+      </if>
+      <if test="itemId != null" >
+        ITEM_ID,
+      </if>
+      <if test="decription != null" >
+        DECRIPTION,
+      </if>
+      <if test="remark != null" >
+        REMARK,
+      </if>
+      <if test="createTimestamp != null" >
+        CREATE_TIMESTAMP,
+      </if>
+      <if test="recordStatus != null" >
+        RECORD_STATUS,
+      </if>
+      <if test="coId != null">
+     	 COID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="creatorId != null" >
+        #{creatorId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="typeId != null" >
+        #{typeId,jdbcType=VARCHAR},
+      </if>
+      <if test="itemId != null" >
+        #{itemId,jdbcType=VARCHAR},
+      </if>
+      <if test="decription != null" >
+        #{decription,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createTimestamp != null" >
+        #{createTimestamp,jdbcType=BIGINT},
+      </if>
+      <if test="recordStatus != null" >
+        #{recordStatus,jdbcType=INTEGER},
+      </if>
+      <if test="coId != null">
+     	#{coId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.charmyin.cmstudio.tzyc.safe.vo.SafeInspectStandard" >
+    update tb_safe_inspect_standard
+    <set >
+      <if test="creatorId != null" >
+        CREATOR_ID = #{creatorId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="typeId != null" >
+        TYPE_ID = #{typeId,jdbcType=VARCHAR},
+      </if>
+      <if test="itemId != null" >
+        ITEM_ID = #{itemId,jdbcType=VARCHAR},
+      </if>
+      <if test="decription != null" >
+        DECRIPTION = #{decription,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        REMARK = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createTimestamp != null" >
+        CREATE_TIMESTAMP = #{createTimestamp,jdbcType=BIGINT},
+      </if>
+      <if test="recordStatus != null" >
+        RECORD_STATUS = #{recordStatus,jdbcType=INTEGER},
+      </if>
+      <if test="coId != null">
+     	COID = #{coId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.charmyin.cmstudio.tzyc.safe.vo.SafeInspectStandard" >
+    update tb_safe_inspect_standard
+    set CREATOR_ID = #{creatorId,jdbcType=INTEGER},
+      CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      TYPE_ID = #{typeId,jdbcType=VARCHAR},
+      ITEM_ID = #{itemId,jdbcType=VARCHAR},
+      DECRIPTION = #{decription,jdbcType=VARCHAR},
+      REMARK = #{remark,jdbcType=VARCHAR},
+      CREATE_TIMESTAMP = #{createTimestamp,jdbcType=BIGINT},
+      COID = #{coId,jdbcType=INTEGER},
+      RECORD_STATUS = #{recordStatus,jdbcType=INTEGER}
+      
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

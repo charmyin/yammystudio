@@ -1,0 +1,10 @@
+eclipse.preferences.version=1
+encoding//src/main/java/com/charmyin/cmstudio/basic/authorize/controller/IdentityController.java=UTF-8
+encoding//src/main/java/com/charmyin/cmstudio/basic/authorize/form/LoginForm.java=UTF-8
+encoding//src/main/java/com/charmyin/cmstudio/basic/authorize/form/RegistrationForm.java=UTF-8
+encoding//src/main/resources=UTF-8
+encoding//src/main/resources/application-spring.properties=UTF-8
+encoding//src/main/resources/servletcontext.properties=UTF-8
+encoding//src/main/webapp/WEB-INF/dynamicviews/basic/organization/orgManage.jsp=UTF-8
+encoding//src/test/resources=UTF-8
+encoding/<project>=UTF-8

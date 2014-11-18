@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Zebone:基础研发平台</title>
+		<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+		<meta http-equiv="description" content="this is my page">
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<link rel="shortcut icon" type="image/x-icon" href="../../../zebone.ico"/>
+		<link rel="stylesheet" type="text/css" href="../../../../vendor/easyui/themes/icon.css" />
+		<link rel="stylesheet" type="text/css" href="../../../css/easyui/login/login.css" />
+		<script src="../../../../vendor/jquery/jquery-1.8.0.min.js" type="text/javascript"></script>
+		<script src="../../../../vendor/easyui/easyloader.js" type="text/javascript"></script>
+		<script type="text/javascript">
+			//监视easyloader加载组件完成的事件
+			easyloader.onLoad = function (event) {
+				//去除加载mask效果
+				if(event === 'parser'){
+					$.parser.onComplete = function (context) {
+						if($("#divLoading").length > 0){
+							$("#loginwindow").window('close');
+							$('#divLoading').fadeOut("slow", function () {
+								$(this).remove();
+								$("#loginwindow").window('open');
+								document.authForm.username.focus();
+							});
+						}
+					};
+				}
+				
+				if(typeof(event) !== 'string' && $.inArray("validatebox", event) !== -1){
+					//添加验证规则 
+					//固定长度
+					$.extend($.fn.validatebox.defaults.rules, {
+						fixedLength: {
+							validator: function(value, param){
+								return value.length === param[0];
+							},
+							message: '字符串长度应为{0}'
+						}
+					});
+				}
+			};
+			easyloader.load('plugins/jquery.form.js');
+		</script>
+		<script data-main="../../../../app/js/apps/easyui/login/loginmain" src="../../../../vendor/requirejs/require.js"></script>
+	</head>
+	<body>
+		<div id="loginwindow" class="easyui-window" title="Zebone&reg;--振邦信息化平台入口" data-options="iconCls:'icon-tip',closable:false, minimizable:false, maximizable:false, resizable:false, shadow:true" style="width:500px; height:300px; padding:2px;">
+			<div class="easyui-layout" fit="true" style="overflow:hidden;">
+				<div region="west">
+				</div>
+				<div region="center" style="width:250px">
+					<div class="easyui-tabs" fit="true">
+					 	<div title="身份认证" iconCls="icon-save">
+					 			<div id="userconfirmDiv">
+				 					<form id="authForm" name="authForm" action="#" method="post">
+				 						<ul id="formUl">
+				 							<li class="inputText">
+				 								<label for="inputUsername">用户名:</label>
+					 							<input class="easyui-validatebox" type="text" id="inputUsername" name="username" type="password" placeholder="用户名" data-options="required:true, validType:'length[1,15]'" autofocus/>
+				 							</li>
+				 							<li class="inputText">
+				 								<label style="" for="inputPassword">密&nbsp;&nbsp;码:</label>
+					 							<input class="easyui-validatebox" type="password" id="inputPassword" name="password" type="password" placeholder="密码" data-options="required:true, validType:'length[1,15]'" />
+				 							</li>
+				 							<li id="liValiCode">
+				 								<label style="" for="inputValiCode">验证码:</label>
+				 								<img src="validateCode1.jpg" id="imgValiCode"/>
+					 							<input class="easyui-validatebox" id="inputValiCode" name="valiCode" placeholder="验证码" data-options="required:true, validType:'fixedLength[5]'" />
+				 							</li>
+				 							<li class="liConfig">
+				 								<div id="checkboxConfig">
+											      <label>
+											        <input type="checkbox" id="inputRememberMe" class="bootstrap"/> <strong>记住密码</strong>
+											      </label>
+											      <label>
+											        <input type="checkbox" id="inputDesktop_login" class="bootstrap"/> <strong>桌面系统</strong>
+											      </label>
+											    </div>
+				 							</li>
+				 						</ul>
+				 					</form>
+					 				<div id="operationBtnsDiv" >
+					 					<div style="height:6px;"></div>
+					 					<a href="#" id="aSubmitForm" class="easyui-linkbutton" iconCls="icon-ok" onclick="">提交</a>
+					 					&nbsp;
+					 					<a href="#" id="aResetForm" class="easyui-linkbutton" iconCls="icon-cancel">重置</a>
+					 				</div>
+					 			</div>
+					 	</div>
+					 	<div title="帮助提示" iconCls="icon-help">
+					 		<div style="margin:70px 0 0 70px;">版权所有，翻版不究^_^</div>
+					 	</div>
+					</div>
+				</div>
+				<div region="south" style="height:30px;line-height:28px;text-align:center;">
+					Powered by  Zebone © 2011-2013  &nbsp;<a href="http://www.zebone.cn" style="text-decoration: none;" target="_blank">http://www.zebone.cn</a>
+				</div>
+			</div>
+		</div>
+	</body>
+ 
+ 	<!--等待界面-->
+	<div id='divLoading'><span>首页载入中~</span></div>
+ 
+</html>

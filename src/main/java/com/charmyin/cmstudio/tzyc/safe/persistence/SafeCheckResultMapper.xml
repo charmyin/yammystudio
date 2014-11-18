@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.charmyin.cmstudio.tzyc.safe.persistence.SafeCheckResultMapper" >
+  <resultMap id="BaseResultMap" type="com.charmyin.cmstudio.tzyc.safe.vo.SafeCheckResult" >
+    <id column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="CREATETIME" property="createTime" jdbcType="VARCHAR" />
+    <result column="DEVICENAME" property="deviceName" jdbcType="VARCHAR" />
+    <result column="INSPECTNAME" property="inspectName" jdbcType="VARCHAR" />
+    <result column="FILEPATH" property="filePath" jdbcType="VARCHAR" />
+    <result column="TASKRESULT" property="taskResult" jdbcType="VARCHAR" />
+    <result column="TASKSTATUS" property="taskStatus" jdbcType="INTEGER" />
+    <result column="INSPECTTIME" property="inspecttime" jdbcType="VARCHAR" />
+    <result column="CREATORNAME" property="creatorName" jdbcType="VARCHAR" />
+    <result column="TASKTYPE" property="taskType" jdbcType="INTEGER" />
+    <result column="TASKSTARTTIME" property="taskStartTime" jdbcType="TIMESTAMP" />
+	<result column="TASKENDTIME" property="taskEndTime" jdbcType="TIMESTAMP" />
+	<result column="TASKCREATETIME" property="taskCreateTime" jdbcType="TIMESTAMP" />
+    
+  </resultMap>
+ 
+  <select id="findAll" resultMap="BaseResultMap" parameterType="com.charmyin.cmstudio.tzyc.safe.vo.SafeCheckResult" >
+   SELECT
+	tb_safe_task_detail.ID as id,
+	TB_SAFE_TASK.CREATE_TIME as createTime,
+	TB_SAFE_DEVICE.NAME as deviceName,
+	shiro_user.NAME as inspectName,
+	TB_SAFE_TASK_DETAIL.TASK_RESULT as taskResult,
+	TB_SAFE_TASK_DETAIL.FILE_PATH as filePath,
+	TB_SAFE_TASK_DETAIL.INSPECT_TIME as inspectTime,
+	TB_SAFE_TASK_DETAIL.TASK_STATUS as taskStatus,
+	creatorUser.name as CREATORNAME	,
+	TB_SAFE_TASK.TASK_TYPE AS TASKTYPE,
+	TB_SAFE_TASK.CREATE_TIME AS TASKCREATETIME,
+	TB_SAFE_TASK.END_TIME AS TASKENDTIME,
+	TB_SAFE_TASK.START_TIME AS TASKSTARTTIME
+FROM
+	tb_safe_task
+left JOIN tb_safe_task_detail ON tb_safe_task_detail.ID = tb_safe_task.DETAIL_ID
+left JOIN tb_safe_device ON tb_safe_task.DEVICE_ID = tb_safe_device.ID
+left JOIN shiro_user ON tb_safe_task_detail.INSPECTOR_ID = shiro_user.id
+left JOIN shiro_user creatorUser ON TB_SAFE_TASK.CREATOR_ID = creatorUser.id
+WHERE
+		tb_safe_task.RECORD_STATUS != 1
+    <if test="coId != null" >
+      and tb_safe_task.COID=#{coId,jdbcType=INTEGER}
+    </if>
+    <if test="startTime != null" >
+       and TB_SAFE_TASK.CREATE_TIME&gt;=#{startTime,jdbcType=TIMESTAMP}
+    </if>
+    <if test="endTime != null" >
+       and TB_SAFE_TASK.CREATE_TIME&lt;=#{endTime,jdbcType=TIMESTAMP}
+    </if>
+  </select>
+
+</mapper>
