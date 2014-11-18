@@ -22,7 +22,7 @@ public class MenuServiceImpl implements MenuService {
 	
 	@Override
 	public List<Menu> getAllMenu() {
-		List<Menu> list = mongoOperations.find(new Query(), Menu.class, "shiro_user");
+		List<Menu> list = mongoOperations.find(new Query(), Menu.class, "shiro_menu");
 		return list;
 	}
 

@@ -33,7 +33,7 @@ public class IdentityServiceImpl implements IdentityService {
 	@Override
 	public Identity registerIdentity(RegistrationForm registration){
 		
-		registration.setSalt(getSalt());
+		registration.setSalt(identityCommonService.getSalt());
 		registration.setPassphrase(identityCommonService.encodePassphrase(registration.getPassphrase(), registration.getSalt()));
 		
 		identityMapper.registerIdentity(registration);
@@ -55,9 +55,7 @@ public class IdentityServiceImpl implements IdentityService {
 		//return this.getIdentity(registration.getId());
 	}
 	*/
-	public static String getSalt(){
-		return new SecureRandomNumberGenerator().nextBytes().toBase64();
-	}
+
 	
 	public Identity getIndentity(int id){
 		logger.trace("Enter getIdentiry(" + id + ")");

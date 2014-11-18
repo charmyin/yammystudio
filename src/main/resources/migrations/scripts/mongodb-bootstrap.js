@@ -47,11 +47,11 @@ db.shiro_role.drop();
 db.shiro_user.drop();
 db.basic_organization.drop();
 
-db.basic_organization.insert({"_id":NumberInt(1),"NAME":"组织架构", "REMARK":"组织架构备注"});
+db.basic_organization.insert({"_id":NumberInt(1),"name":"组织架构", "remark":"组织架构备注"});
 
-db.shiro_user.insert({"_id":NumberInt(1),"login_id":"admin", "name":"admin", "email":"admin@admin.com", "sex":"1", "cellphone":"22222222222", "passphrase":"wHcjhQc5KwW7zSO5OfQ6FRqvpcE2Zw6FkVHJRcnE57AoeaPaZ5DboqYbHGBjOKDE8Rl9+bclnF6lQ4y0D6GiaA==", "salt":"qpOvViSVIY7XyYMpAsJHnQ==", "state":true, "organization_id":1, "date_created":new Date()});
+db.shiro_user.insert({"_id":NumberInt(1),"loginId":"admin", "name":"admin", "email":"admin@admin.com", "sex":"1", "cellphone":"22222222222", "passphrase":"wHcjhQc5KwW7zSO5OfQ6FRqvpcE2Zw6FkVHJRcnE57AoeaPaZ5DboqYbHGBjOKDE8Rl9+bclnF6lQ4y0D6GiaA==", "salt":"qpOvViSVIY7XyYMpAsJHnQ==", "state":true, "organizationId":1, "dateCreated":new Date()});
 
-db.shiro_role.insert({"_id":NumberInt(1),"name":"developer","description":"开发者角色", "organization_id":NumberInt(1), "permission":"", "menu":"1,2,3,4,5,6,7,8,9",  "remark":"开发者角色", "state":true});
+db.shiro_role.insert({"_id":NumberInt(1),"name":"developer","description":"开发者角色", "organizationId":NumberInt(1), "permission":"", "menu":"1,2,3,4,5,6,7,8,9",  "remark":"开发者角色", "state":true});
 
 db.shiro_role.insert({"_id":NumberInt(1),"userId":NumberInt(1), "roleId":NumberInt(1)});
 

@@ -320,7 +320,7 @@ public class JMongodbRealm extends AuthorizingRealm {
         try {
           // "select passphrase, CONCAT('${shiro.applicationSalt}', ':', salt) as salt from shiro_user where login_id = ?"
         	User user = mongoOperations.findOne(
-                    new Query(Criteria.where("login_id").is(username)),
+                    new Query(Criteria.where("loginId").is(username)),
                     User.class, "shiro_user");
            result[0]=user.getPassphrase();
            result[1]=shiroSalt+":"+user.getSalt();

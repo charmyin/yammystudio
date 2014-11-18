@@ -4,12 +4,14 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.Email;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
  * Basic Registration Form With JSR-303 Validation
  * @author charmyin
  *
  */
+@Document(collection="shiro_user")
 public class RegistrationForm {
 	@NotNull(message = "用户名不能为空！")
 	@Size(min=4, max=50, message="用户名长度必须大4小于50")
